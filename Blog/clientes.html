@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=Padroes Web">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Notícias Express</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    .box-cliente {
+        width: 300px;
+        float: left;
+    }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <nav class="MenuPrincipal">
+            <ul>
+                <a href="index.html">Páginal Principal</a>
+                <a href="SobreNos.html">Sobre nos</a>
+                <a href="Contato.html">Contatos</a>
+                <a href="clientes.html">Clientes</a>
+            </ul>
+        </nav>
+        <p class="Nome">Notícias Express</p>        
+    </header>
+    <main>
+        <button onclick="getData()">Disparar</button>
+        <h1 class="Clientes22">Clientes</h1>
+        <div id="Lista-Clientes">
+            <div class="box-cliente">
+                <img src="http://lorempixel.com/200/120/people" alt=""> 
+                <p>Pedro Belo</p>
+                <P>Fone: 35994567</P>
+                <p>Belo Horizonte - MG</p>
+            </div>
+
+
+
+        </div>
+    </main>
+    <footer>
+        Copyright 2019 (c) Pedro Belo
+    </footer>
+   <script>
+   
+    var req = new XMLHttpRequest ();
+
+    var url = 'https://randomuser.me/api/?results=50';
+
+    function processaDados() {
+        var dados = JSON.parse(req.responseText);
+        var saida = '';
+        for(i=0;i<dados.results.length; i++)
+        {
+            saida += `<div id="Lista-Clientes">
+            <div class="box-cliente">
+                <img src="${dados.results[i].picture.medium}" alt=""> 
+                <p>${dados.results[i].name.first} ${dados.results[i].name.last}</p>
+                <P>Fone: ${dados.results[i].phone}</P>
+                <p>${dados.results[i].location.city} + ${dados.results[i].location.state}</p>
+            </div>`;
+        }
+        document.getElementById('Lista-Clientes').innerHTML = saida;
+    }
+
+
+
+    function getData () {
+        req.onload = processaDados;
+        req.open('GET',url,true);
+        req.send();
+
+    }
+
+   </script> 
+</body>
+
+</html>

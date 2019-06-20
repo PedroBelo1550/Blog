@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=Padroes Web">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Postagens do dia</title>
+    <link rel="stylesheet" href="style.css">
+
+
+
+</head>
+
+<body>
+    <header>
+        <nav class="MenuPrincipal">
+            <ul>
+                <a href="index.html">Páginal Principal</a>
+                <a href="SobreNos.html">Sobre nos</a>
+                <a href="Contato.html">Contatos</a>
+                <a href="clientes.html">Clientes</a>
+            </ul>
+        </nav>
+        <p class="Nome">BLOG</p>
+    </header>
+    <main>
+        <h1 class="Titulo2">Postagens do Dia</h1>
+
+        <div class="form-group">
+            <label class="col-md-12 control-label">Título</label>
+            <div class="col-md-12">
+                <input type="text" id="Titulo" class="form-control">
+            </div>
+
+            <label class="col-md-12 control-label">Descricao</label>
+            <div class="col-md-12">
+                <input type="text" id="descricao" class="form-control">
+            </div>
+
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-outline-success" onclick="insertPost()" id="postagem">Incluir Postagem</button>
+            </div>
+
+        </div>
+
+        <div id="Lista-Postagem">
+
+
+
+        </div>
+
+
+
+
+    </main>
+    <footer>
+        Copyright 2019 (c) Pedro Belo
+    </footer>
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="dbfake.js"></script>
+    <script>
+        function exibePostagem() {
+            // Remove todas as linhas do corpo da tabela
+            $("#Lista-Postagem").html("");
+            let Num = dbPedroBelo.data.length - 1;
+            // Popula a tabela com os registros do banco de dados
+            for (i = Num; i >= 0; i--) {
+                let Postagem = dbPedroBelo.data[i];
+                $("#Lista-Postagem").append(`<div id="L ista-Postagem"><div class="box-Noticias"><b>
+                    <p id="Contar">Postagem nº:<span class="identificador">${Postagem.id}</span> </p>
+                    <p>${Postagem.Titulo}</p></b>
+                    <p>${Postagem.Descricao}</p>
+                    <img src="${Postagem.Foto}" alt="">
+                    <p>Data da Postagem: ${Postagem.Data}</p>
+                    <button id="Curtir" class="Contador">Curtir <span class="NCurtidas">0</span></button>
+                    <p>${Postagem.Comentarios}</p>
+                    <p>${Postagem.Nome}</p></div>`);
+
+            }
+        }
+
+
+        function Curtidas() {
+            totalCurtidas = parseInt($(this).find('span').html());
+            var numero = totalCurtidas + 1;
+            $(this).find('span').html(numero);
+            let campoId = $('identificador').val();
+
+            
+
+
+
+        }
+
+        $('document').ready(function () {
+            exibePostagem();
+
+            $('.Contador').click(Curtidas);
+        });
+
+
+
+        //Função para Inserir Receita
+        function insertPost() {
+            // Calcula novo Id a partir do último código existente no array 
+            let novoId = dbPedroBelo.data.length > 0 ? dbPedroBelo.data[dbPedroBelo.data.length - 1].id + 1 : 1;
+            var data = new Date()
+
+            var day = data.getDate();
+            var monthIndex = data.getMonth();
+            var year = data.getFullYear();
+
+            let novaPost = {
+                "id": novoId,
+                "Titulo": $("#Titulo").val(),
+                "Descricao": $("#descricao").val(),
+                "Foto": 'https://picsum.photos/200/120',
+                "Data": day + "/" + monthIndex + "/" + year,
+                "Curtidas": 0,
+                "Comentarios": '',
+                "Nome":''
+
+            };
+
+            // Insere o novo objeto no array
+            dbPedroBelo.data.push(novaPost);
+            alert("Contato inserido com sucesso");
+
+            // Atualiza os dados no Local Storage
+            localStorage.setItem('dbPedroBelo', JSON.stringify(dbPedroBelo));
+            
+            $('document').ready(function () {
+            exibePostagem();
+
+            $('.Contador').click(Curtidas);
+            });
+
+            
+        }
+
+    </script>
+
+
+</body>
+
+
+
+</html>
